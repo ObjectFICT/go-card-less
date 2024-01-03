@@ -52,8 +52,6 @@ export default class GoCardLessFinalizer extends Component {
 
   completeRedirectFlow() {
     const { api, auth, sessionToken, redirectFlowId } = this.props;
-    alert("Start")
-
     fetch(`${api}/redirect_flows/${redirectFlowId}/actions/complete`, {
       method: 'POST',
       headers: {
@@ -67,23 +65,21 @@ export default class GoCardLessFinalizer extends Component {
         }
       }),
     }).then(response => {
-      alert(JSON.stringify(response));
       return response.json();
     })
       .then(json => {
         const mandate = json.redirect_flows.links.mandate;
-        const bankAccount = json.redirect_flows.links.customer_bank_account;
+        const customer = json.redirect_flows.links.customer;
         const url = this.state.currentUrl;
-        alert(url)
 
         const { onMandateAction } = this.props;
         if (onMandateAction) {
-          onMandateAction(mandate, bankAccount, url);
+          onMandateAction(mandate, customer, url);
         }
       })
   }
 
   render() {
-    return (<Text>{this.state.currentUrl}</Text>);
+    return (<Text style={{ color: 'transparent' }}>{this.state.currentUrl}</Text>);
   }
 }
