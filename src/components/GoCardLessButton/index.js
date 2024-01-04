@@ -52,6 +52,7 @@ export default class GoCardLessButton extends Component {
     const {
       buttonText,
       buttonColor,
+      buttonShadow,
       buttonRadius,
       borderWidth,
       borderColor,
@@ -65,22 +66,35 @@ export default class GoCardLessButton extends Component {
       radius = _height / 2 < buttonRadius ? _height / 2 : buttonRadius
     }
 
+    const style = {
+      height: _height,
+      width: "100%",
+      backgroundColor: buttonColor,
+      borderRadius: radius,
+      borderWidth: borderWidth,
+      borderColor: borderColor,
+    };
+
+    if (buttonShadow) {
+      style.shadowColor = '#000000';
+      style.shadowOpacity = 0.2;
+      style.shadowRadius = 2;
+      style.elevation = 2;
+      style.shadowOffset = {
+        width: 0,
+        height: 3
+      };
+    }
+
     return (
       <TouchableHighlight
         onPress={this.createRedirectFlow}
-        style={{
-          height: _height,
-          width: _width,
-          backgroundColor: buttonColor,
-          borderRadius: radius,
-          borderWidth: borderWidth,
-          borderColor: borderColor,
-        }}>
+        style={style}>
         <Text
           style={{
             height: _height,
             lineHeight: _height,
-            width: _width,
+            width: "100%",
             textAlign: 'center',
             color: styles.buttonText.color,
             fontWeight: styles.buttonText.fontWeight,

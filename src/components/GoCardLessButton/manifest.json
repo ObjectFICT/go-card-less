@@ -80,6 +80,12 @@
           "defaultValue": "@primary"
         },
         {
+          "name": "buttonShadow",
+          "displayName": "Shadow",
+          "type": "boolean",
+          "defaultValue": false
+        },
+        {
           "name": "buttonRadius",
           "displayName": "Button Radius",
           "type": "number",
