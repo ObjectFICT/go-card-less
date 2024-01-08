@@ -52,24 +52,16 @@
       "default": "status"
     },
     {
-      "name": "onMandateAction",
+      "name": "onReady",
       "type": "action",
-      "displayName": "Finish Mandate Action",
+      "displayName": "Ready Action",
       "arguments": [
-        {
-          "type": "text",
-          "displayName": "Mandate"
-        },
-        {
-          "type": "text",
-          "displayName": "Customer ID"
-        },
         {
           "type": "text",
           "displayName": "Success URL"
         }
       ],
-      "helpText": "Action when user complete redirect flow and after that mandate value can be accessible."
+      "helpText": "Action when redirect flow ready for complete!"
     }
   ]
 }

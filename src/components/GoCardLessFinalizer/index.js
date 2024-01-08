@@ -20,17 +20,19 @@ export default class GoCardLessFinalizer extends Component {
     Linking.getInitialURL().then((url) => this.setState({ currentUrl: url }));
   }
 
-  componentWillMount() {
-    this.setState({ currentUrl: null });
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const { sessionToken, redirectFlowId, status } = this.props;
-    if (this.state.currentUrl != null && this.state.redirectUrl != null) {
-      if (status === "pending" && prevProps.sessionToken !== sessionToken && prevProps.redirectFlowId !== redirectFlowId) {
-        if (this.state.currentUrl.toLowerCase().includes(this.state.redirectUrl)) {
-          this.completeRedirectFlow();
-        }
+
+    const isValid = this.validParams(this.state.currentUrl, this.state.redirectUrl, this.state.currentUrl, sessionToken, redirectFlowId);
+
+    if (status === "pending"
+      && isValid
+      && prevProps.sessionToken !== sessionToken
+      && prevProps.redirectFlowId !== redirectFlowId
+      && this.isInclude(this.state.currentUrl, this.state.redirectUrl, sessionToken)) {
+      const { onReady } = this.props;
+      if (onReady) {
+        onReady(this.state.currentUrl);
       }
     }
   }
@@ -39,44 +41,34 @@ export default class GoCardLessFinalizer extends Component {
     this.setState({ currentUrl: url });
 
     const { sessionToken, redirectFlowId, status } = this.props;
-    if (status === "pending"
-      && sessionToken != null
-      && redirectFlowId != null
-      && this.state.redirectUrl != null
-      && url != null) {
-      if (url.toLowerCase().includes(this.state.redirectUrl)) {
-        this.completeRedirectFlow();
+
+    const isValid = this.validParams(sessionToken, redirectFlowId, this.state.redirectUrl, url);
+    if (status === "pending" && isValid && this.isInclude(url, this.state.redirectUrl, sessionToken)) {
+      const { onReady } = this.props;
+      if (onReady) {
+        onReady(url.toString());
       }
     }
   }
 
-  completeRedirectFlow() {
-    const { api, auth, sessionToken, redirectFlowId } = this.props;
-    fetch(`${api}/redirect_flows/${redirectFlowId}/actions/complete`, {
-      method: 'POST',
-      headers: {
-        Authorization: auth,
-        'Content-Type': 'application/json',
-        'GoCardless-Version': '2015-07-06'
-      },
-      body: JSON.stringify({
-        data: {
-          session_token: sessionToken,
-        }
-      }),
-    }).then(response => {
-      return response.json();
-    })
-      .then(json => {
-        const mandate = json.redirect_flows.links.mandate;
-        const customer = json.redirect_flows.links.customer;
-        const url = this.state.currentUrl;
+  validParams(...params) {
+    for (let param of params) {
+      if (param === null || (typeof param === "string" && param.length === 0)) {
+        return false;
+      }
+    }
 
-        const { onMandateAction } = this.props;
-        if (onMandateAction) {
-          onMandateAction(mandate, customer, url);
-        }
-      })
+    return true;
+  }
+
+  isInclude(string, ...searchStrings) {
+    for (let searchString of searchStrings) {
+      if (!string.toLowerCase().includes(searchString)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   render() {
