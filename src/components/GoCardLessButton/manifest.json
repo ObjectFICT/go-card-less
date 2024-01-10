@@ -22,6 +22,12 @@
       "global": true
     },
     {
+      "name": "cloudFuncUrl",
+      "displayName": "Cloud function URL for redirect. Should contains 'uri' param! Can be Google Cloud function, Xano...",
+      "type": "text",
+      "default": "https://example.com"
+    },
+    {
       "name": "path",
       "displayName": "Success Path",
       "type": "text",
