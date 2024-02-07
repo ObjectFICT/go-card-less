@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Linking, Text } from 'react-native';
 
-export default class GoCardLessFinalizer extends Component {
+export default class BillingFinalizer extends Component {
 
   constructor(props) {
     super(props);
@@ -9,7 +9,7 @@ export default class GoCardLessFinalizer extends Component {
 
     this.state = {
       currentUrl: null,
-      redirectUrl: `${uriSchema}://${urlHostname}/gocardless`
+      redirectUrl: `${uriSchema}://${urlHostname}/gocardless/billing`
     };
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
@@ -21,32 +21,27 @@ export default class GoCardLessFinalizer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sessionToken, redirectFlowId, status } = this.props;
+    const { status } = this.props;
+    const isValid = this.validParams(this.state.currentUrl, this.state.redirectUrl);
 
-    const isValid = this.validParams(this.state.currentUrl, this.state.redirectUrl, this.state.currentUrl, sessionToken, redirectFlowId);
-
-    if (status === "pending"
-      && isValid
-      && prevProps.sessionToken !== sessionToken
-      && prevProps.redirectFlowId !== redirectFlowId
-      && this.isInclude(this.state.currentUrl, this.state.redirectUrl, sessionToken)) {
+    if (isValid && this.isInclude(this.state.currentUrl, this.state.redirectUrl && status === "pending")) {
       const { onReady } = this.props;
       if (onReady) {
-        onReady(this.state.currentUrl);
+        const splitUrl = this.state.currentUrl.split("/");
+        onReady(this.state.currentUrl, splitUrl[splitUrl.length - 2]);
       }
     }
   }
 
   handleUrlChange({ url }) {
+    const { status } = this.props;
     this.setState({ currentUrl: url });
 
-    const { sessionToken, redirectFlowId, status } = this.props;
-
-    const isValid = this.validParams(sessionToken, redirectFlowId, this.state.redirectUrl, url);
-    if (status === "pending" && isValid && this.isInclude(url, this.state.redirectUrl, sessionToken)) {
+    if (this.validParams(this.state.redirectUrl, url) && this.isInclude(url, this.state.redirectUrl) && status === "pending") {
       const { onReady } = this.props;
       if (onReady) {
-        onReady(url.toString());
+        const splitUrl = url.split("/");
+        onReady(url.toString(), splitUrl[splitUrl.length - 2]);
       }
     }
   }

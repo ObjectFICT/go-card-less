@@ -1,3 +1,4 @@
 // Named export must match component name in package.json
-export { default as GoCardLessButton } from './src/components/GoCardLessButton'
-export { default as GoCardLessFinalizer } from './src/components/GoCardLessFinalizer'
+export { default as MandateButton } from './src/components/MandateButton'
+export { default as MandateFinalizer } from './src/components/MandateFinalizer'
+export { default as BillingFinalizer } from './src/components/BillingFinalizer'

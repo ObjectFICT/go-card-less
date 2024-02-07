@@ -1,7 +1,7 @@
 import React from "react";
 
-export default function GoCardLessButton(props) {
-  const { _height, _width } = props;
+export default function MandateButton(props) {
+  const { _height } = props;
   const {
     buttonText,
     buttonColor,

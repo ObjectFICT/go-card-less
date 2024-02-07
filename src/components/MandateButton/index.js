@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Linking, Text, TouchableHighlight } from 'react-native';
 import uuid from 'react-native-uuid';
 
-export default class GoCardLessButton extends Component {
+export default class MandateButton extends Component {
 
   constructor(props) {
     super(props);

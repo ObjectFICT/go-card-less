@@ -1,0 +1,47 @@
+{
+  "displayName": "GoCardLess Billing Finalizer",
+  "defaultWidth": 180,
+  "defaultHeight": 30,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./logo.png",
+  "props": [
+    {
+      "name": "uriSchema",
+      "displayName": "What URI scheme do you want to use?",
+      "type": "text",
+      "default": "cosm",
+      "global": true
+    },
+    {
+      "name": "urlHostname",
+      "displayName": "What hostname do you want to use?",
+      "type": "text",
+      "default": "cosm.gocardless",
+      "global": true
+    },
+    {
+      "name": "status",
+      "displayName": "Status Redirect flow",
+      "type": "text",
+      "default": "status"
+    },
+    {
+      "name": "onReady",
+      "type": "action",
+      "displayName": "Ready Action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "Success URL"
+        },
+        {
+          "type": "text",
+          "displayName": "Billing Request ID"
+        }
+      ],
+      "helpText": "Action when URL was changed on billing request URL!"
+    }
+  ]
+}
