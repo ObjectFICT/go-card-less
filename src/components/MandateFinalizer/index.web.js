@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function MandateFinalizer(props) {
+export default function MandateFinalizer() {
   return (
     <div>
       <p>Mandate Finalizer</p>
