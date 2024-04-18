@@ -22,12 +22,17 @@ sed -i.bak '1i\
 #import <React/RCTLinkingManager.h>\
 ' ./${name}/AppDelegate.h
 
-sed -i.bak '/@end/c\
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {\
-  return [RCTLinkingManager application:application openURL:url options:options];\
-}\
-@end\
-' ./${name}/AppDelegate.mm
+cat ./${name}/AppDelegate.mm
+
+if ! grep -qiwe "options:(NSDictionary<UIApplicationOpenURLOptionsKey,id>" ./${name}/AppDelegate.mm; then
+  sed -i.bak '/@end/c\
+  - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {\
+    return [RCTLinkingManager application:application openURL:url options:options];\
+  }\
+  @end\' ./${name}/AppDelegate.mm
+fi
+
+cat ./${name}/AppDelegate.mm
 
 sed -i.bak '/<key>CFBundleDisplayName<\/key>/c\
 <key>CFBundleURLTypes<\/key>\
